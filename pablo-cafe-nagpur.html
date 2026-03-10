@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pablo – The Art Cafe & Lounge | Nagpur</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Bebas+Neue&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --gold: #C9A96E;
+    --gold-light: #E8D5A3;
+    --deep: #0A0806;
+    --ink: #1A1510;
+    --warm: #2C2218;
+    --cream: #F5EDD8;
+    --rust: #8B3A2A;
+    --muted: rgba(201,169,110,0.15);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--deep);color:var(--cream);font-family:'Montserrat',sans-serif;overflow-x:hidden;cursor:none;}
+
+  /* CUSTOM CURSOR */
+  .cursor{position:fixed;width:10px;height:10px;background:var(--gold);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s;}
+  .cursor-ring{position:fixed;width:36px;height:36px;border:1px solid var(--gold);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:transform 0.15s,width 0.2s,height 0.2s;opacity:0.6;}
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar{width:4px;}
+  ::-webkit-scrollbar-track{background:var(--ink);}
+  ::-webkit-scrollbar-thumb{background:var(--gold);border-radius:2px;}
+
+  /* NAV */
+  nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:24px 60px;display:flex;justify-content:space-between;align-items:center;transition:all 0.4s;background:transparent;}
+  nav.scrolled{background:rgba(10,8,6,0.96);backdrop-filter:blur(12px);padding:16px 60px;border-bottom:1px solid rgba(201,169,110,0.15);}
+  .nav-logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:6px;color:var(--gold);text-decoration:none;}
+  .nav-links{display:flex;gap:36px;list-style:none;}
+  .nav-links a{color:rgba(245,237,216,0.75);text-decoration:none;font-size:11px;letter-spacing:3px;text-transform:uppercase;transition:color 0.3s;font-weight:500;}
+  .nav-links a:hover{color:var(--gold);}
+  .nav-reserve{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:10px 24px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:none;transition:all 0.3s;}
+  .nav-reserve:hover{background:var(--gold);color:var(--deep);}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+  .hamburger span{width:25px;height:1px;background:var(--gold);}
+
+  /* HERO */
+  #hero{position:relative;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+  .hero-bg{position:absolute;inset:0;background:
+    radial-gradient(ellipse at 20% 50%, rgba(139,58,42,0.25) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(201,169,110,0.12) 0%, transparent 50%),
+    linear-gradient(160deg, #0A0806 0%, #1A1510 40%, #0D0A07 100%);}
+  .hero-bg::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");opacity:0.4;}
+  .hero-content{position:relative;text-align:center;z-index:2;}
+  .hero-eyebrow{font-size:10px;letter-spacing:8px;text-transform:uppercase;color:var(--gold);margin-bottom:24px;opacity:0;animation:fadeUp 1s 0.3s forwards;}
+  .hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(72px,10vw,140px);font-weight:300;line-height:0.9;color:var(--cream);letter-spacing:-2px;opacity:0;animation:fadeUp 1s 0.6s forwards;}
+  .hero-title em{font-style:italic;color:var(--gold);}
+  .hero-title span{display:block;font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,8vw,110px);letter-spacing:12px;color:transparent;-webkit-text-stroke:1px var(--gold-light);}
+  .hero-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;color:rgba(245,237,216,0.55);margin-top:32px;letter-spacing:2px;opacity:0;animation:fadeUp 1s 0.9s forwards;}
+  .hero-actions{display:flex;gap:20px;justify-content:center;margin-top:48px;opacity:0;animation:fadeUp 1s 1.2s forwards;}
+  .btn-primary{background:var(--gold);color:var(--deep);padding:16px 40px;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;font-weight:600;cursor:none;border:none;transition:all 0.3s;}
+  .btn-primary:hover{background:var(--gold-light);transform:translateY(-2px);}
+  .btn-outline{background:transparent;border:1px solid rgba(245,237,216,0.4);color:var(--cream);padding:16px 40px;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;font-weight:500;cursor:none;transition:all 0.3s;}
+  .btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+  .hero-scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp 1s 1.6s forwards;}
+  .hero-scroll span{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:rgba(201,169,110,0.6);}
+  .scroll-line{width:1px;height:50px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollLine 2s infinite;}
+  @keyframes scrollLine{0%{transform:scaleY(0);transform-origin:top;}50%{transform:scaleY(1);transform-origin:top;}51%{transform:scaleY(1);transform-origin:bottom;}100%{transform:scaleY(0);transform-origin:bottom;}}
+  .hero-badge{position:absolute;right:60px;top:50%;transform:translateY(-50%);width:120px;height:120px;border:1px solid rgba(201,169,110,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;animation:rotateSlow 20s linear infinite;}
+  .hero-badge-text{font-family:'Cormorant Garamond',serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);text-align:center;line-height:1.6;}
+  @keyframes rotateSlow{from{transform:translateY(-50%) rotate(0)}to{transform:translateY(-50%) rotate(360deg)}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+  /* SECTION COMMON */
+  section{padding:120px 60px;}
+  .section-tag{font-size:9px;letter-spacing:6px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;display:block;}
+  .section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(40px,5vw,72px);font-weight:300;line-height:1;color:var(--cream);}
+  .section-title em{font-style:italic;color:var(--gold);}
+  .divider{width:60px;height:1px;background:var(--gold);margin:24px 0;}
+  .divider.center{margin:24px auto;}
+
+  /* ABOUT */
+  #about{background:var(--ink);}
+  .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;max-width:1200px;margin:60px auto 0;}
+  .about-visual{position:relative;}
+  .about-img-main{width:100%;aspect-ratio:3/4;object-fit:cover;filter:sepia(20%) brightness(0.85);}
+  .about-img-accent{position:absolute;bottom:-40px;right:-40px;width:55%;aspect-ratio:1;object-fit:cover;border:4px solid var(--deep);filter:sepia(10%) brightness(0.9);}
+  .about-gold-frame{position:absolute;top:-20px;left:-20px;width:100%;height:100%;border:1px solid rgba(201,169,110,0.25);pointer-events:none;}
+  .about-text p{font-size:15px;line-height:1.9;color:rgba(245,237,216,0.7);margin-bottom:20px;font-weight:300;}
+  .about-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:48px;padding-top:48px;border-top:1px solid rgba(201,169,110,0.15);}
+  .stat-num{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:var(--gold);line-height:1;}
+  .stat-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(245,237,216,0.5);margin-top:6px;}
+
+  /* GALLERY */
+  #gallery{background:var(--deep);padding:120px 0;}
+  .gallery-header{padding:0 60px;text-align:center;margin-bottom:60px;}
+  .gallery-grid{display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:300px 300px;gap:4px;}
+  .gallery-item{overflow:hidden;position:relative;}
+  .gallery-item img{width:100%;height:100%;object-fit:cover;transition:transform 0.6s,filter 0.4s;filter:brightness(0.7) sepia(10%);}
+  .gallery-item:hover img{transform:scale(1.06);filter:brightness(0.85) sepia(0%);}
+  .gallery-item:nth-child(1){grid-column:span 2;grid-row:span 2;}
+  .gallery-item:nth-child(2){grid-column:span 2;}
+  .gallery-item:nth-child(3){grid-column:span 2;}
+  .gallery-item:nth-child(4){grid-column:span 1;}
+  .gallery-item:nth-child(5){grid-column:span 1;}
+  .gallery-item:nth-child(6){grid-column:span 2;}
+  .gallery-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.7),transparent 50%);opacity:0;transition:opacity 0.4s;}
+  .gallery-item:hover .gallery-overlay{opacity:1;}
+
+  /* MENU */
+  #menu{background:var(--warm);position:relative;overflow:hidden;}
+  #menu::before{content:'MENU';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Bebas Neue',sans-serif;font-size:400px;color:rgba(201,169,110,0.03);letter-spacing:20px;white-space:nowrap;pointer-events:none;}
+  .menu-header{text-align:center;margin-bottom:60px;}
+  .menu-tabs{display:flex;justify-content:center;gap:0;margin-bottom:60px;border-bottom:1px solid rgba(201,169,110,0.2);}
+  .menu-tab{background:none;border:none;color:rgba(245,237,216,0.45);font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;padding:16px 32px;cursor:none;transition:all 0.3s;position:relative;}
+  .menu-tab::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform 0.3s;}
+  .menu-tab.active{color:var(--gold);}
+  .menu-tab.active::after,.menu-tab:hover::after{transform:scaleX(1);}
+  .menu-tab:hover{color:var(--cream);}
+  .menu-panel{display:none;max-width:1100px;margin:0 auto;}
+  .menu-panel.active{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+  .menu-section{grid-column:span 2;margin-bottom:40px;}
+  .menu-section-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;color:var(--gold);font-style:italic;margin-bottom:24px;padding-bottom:12px;border-bottom:1px solid rgba(201,169,110,0.2);}
+  .menu-item{display:flex;justify-content:space-between;align-items:flex-start;padding:16px 0;border-bottom:1px solid rgba(245,237,216,0.05);}
+  .menu-item:last-child{border-bottom:none;}
+  .menu-item-info{flex:1;}
+  .menu-item-name{font-size:14px;font-weight:500;color:var(--cream);letter-spacing:0.5px;display:flex;align-items:center;gap:8px;}
+  .veg-dot{width:10px;height:10px;border:1px solid #4CAF50;border-radius:1px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .veg-dot::after{content:'';width:6px;height:6px;background:#4CAF50;border-radius:50%;}
+  .nonveg-dot{width:10px;height:10px;border:1px solid #e53935;border-radius:1px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .nonveg-dot::after{content:'';width:6px;height:6px;background:#e53935;border-radius:50%;}
+  .menu-item-desc{font-size:11px;color:rgba(245,237,216,0.4);margin-top:4px;font-style:italic;line-height:1.5;}
+  .menu-price{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--gold);font-weight:400;white-space:nowrap;margin-left:20px;}
+  .menu-cols{display:grid;grid-template-columns:1fr 1fr;gap:0 60px;}
+
+  /* EXPERIENCE */
+  #experience{background:var(--deep);}
+  .exp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:60px;}
+  .exp-card{background:var(--ink);padding:52px 40px;position:relative;overflow:hidden;transition:transform 0.4s;}
+  .exp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,transparent,var(--gold),transparent);transform:scaleX(0);transition:transform 0.4s;}
+  .exp-card:hover::before{transform:scaleX(1);}
+  .exp-card:hover{transform:translateY(-4px);}
+  .exp-icon{width:56px;height:56px;border:1px solid rgba(201,169,110,0.3);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:28px;font-size:24px;}
+  .exp-card h3{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;color:var(--cream);margin-bottom:16px;}
+  .exp-card p{font-size:13px;line-height:1.8;color:rgba(245,237,216,0.5);font-weight:300;}
+
+  /* RESERVATION */
+  #reservation{background:var(--ink);position:relative;overflow:hidden;}
+  #reservation::after{content:'RESERVE';position:absolute;right:-60px;top:50%;transform:translateY(-50%) rotate(90deg);font-family:'Bebas Neue',sans-serif;font-size:200px;color:rgba(201,169,110,0.04);letter-spacing:10px;pointer-events:none;}
+  .res-grid{display:grid;grid-template-columns:1fr 1fr;gap:100px;align-items:start;max-width:1100px;margin:60px auto 0;}
+  .res-info h3{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:300;color:var(--cream);line-height:1.2;margin-bottom:24px;}
+  .res-info p{font-size:14px;line-height:1.9;color:rgba(245,237,216,0.6);margin-bottom:32px;font-weight:300;}
+  .res-details{display:flex;flex-direction:column;gap:20px;}
+  .res-detail-item{display:flex;gap:16px;align-items:flex-start;}
+  .res-detail-icon{color:var(--gold);font-size:18px;margin-top:2px;}
+  .res-detail-text strong{display:block;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:4px;}
+  .res-detail-text span{font-size:13px;color:rgba(245,237,216,0.6);}
+  .res-form{display:flex;flex-direction:column;gap:20px;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+  .form-group{display:flex;flex-direction:column;gap:8px;}
+  .form-group label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(201,169,110,0.7);}
+  .form-group input,.form-group select,.form-group textarea{background:rgba(245,237,216,0.04);border:1px solid rgba(201,169,110,0.2);color:var(--cream);padding:14px 18px;font-family:'Montserrat',sans-serif;font-size:13px;outline:none;transition:border-color 0.3s;cursor:none;}
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gold);}
+  .form-group select{appearance:none;cursor:none;}
+  .form-group select option{background:var(--ink);}
+  .form-group textarea{resize:none;height:100px;}
+  .form-note{font-size:11px;color:rgba(245,237,216,0.3);font-style:italic;margin-top:-8px;}
+  .btn-submit{background:var(--gold);color:var(--deep);padding:18px;font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:4px;text-transform:uppercase;font-weight:600;cursor:none;border:none;transition:all 0.3s;width:100%;}
+  .btn-submit:hover{background:var(--gold-light);transform:translateY(-2px);}
+
+  /* EVENTS */
+  #events{background:var(--deep);}
+  .events-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:60px;}
+  .event-card{border:1px solid rgba(201,169,110,0.15);padding:40px;position:relative;transition:border-color 0.4s;}
+  .event-card:hover{border-color:rgba(201,169,110,0.5);}
+  .event-date{font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--gold);line-height:1;}
+  .event-month{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:rgba(245,237,216,0.4);margin-bottom:20px;}
+  .event-card h3{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--cream);margin-bottom:12px;}
+  .event-card p{font-size:12px;line-height:1.7;color:rgba(245,237,216,0.5);}
+  .event-tag{display:inline-block;border:1px solid var(--gold);color:var(--gold);font-size:9px;letter-spacing:3px;text-transform:uppercase;padding:5px 14px;margin-top:20px;}
+
+  /* TESTIMONIALS */
+  #testimonials{background:var(--warm);}
+  .testimonials-inner{max-width:900px;margin:60px auto 0;text-align:center;}
+  .testimonial-slider{position:relative;overflow:hidden;}
+  .testimonial-slide{display:none;animation:fadeIn 0.6s ease;}
+  .testimonial-slide.active{display:block;}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+  .testimonial-quote{font-family:'Cormorant Garamond',serif;font-size:26px;font-style:italic;font-weight:300;line-height:1.7;color:var(--cream);margin-bottom:32px;}
+  .testimonial-quote::before{content:'\201C';font-size:80px;color:var(--gold);opacity:0.4;line-height:0;vertical-align:-32px;margin-right:8px;}
+  .testimonial-author{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);}
+  .testimonial-stars{color:var(--gold);font-size:14px;margin-bottom:12px;}
+  .testimonial-nav{display:flex;justify-content:center;gap:12px;margin-top:40px;}
+  .t-dot{width:28px;height:2px;background:rgba(201,169,110,0.3);cursor:none;transition:background 0.3s;}
+  .t-dot.active{background:var(--gold);}
+
+  /* CONTACT / FOOTER */
+  #contact{background:var(--deep);padding:120px 60px 0;}
+  .contact-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:80px;padding-bottom:80px;border-bottom:1px solid rgba(201,169,110,0.1);}
+  .contact-brand{} 
+  .contact-logo{font-family:'Bebas Neue',sans-serif;font-size:40px;letter-spacing:8px;color:var(--gold);margin-bottom:20px;}
+  .contact-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:rgba(245,237,216,0.5);margin-bottom:32px;}
+  .social-links{display:flex;gap:16px;margin-top:24px;}
+  .social-link{width:40px;height:40px;border:1px solid rgba(201,169,110,0.3);display:flex;align-items:center;justify-content:center;color:var(--gold);text-decoration:none;font-size:14px;transition:all 0.3s;}
+  .social-link:hover{background:var(--gold);color:var(--deep);}
+  .contact-col h4{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:24px;}
+  .contact-col ul{list-style:none;}
+  .contact-col ul li{font-size:13px;color:rgba(245,237,216,0.55);margin-bottom:12px;line-height:1.6;}
+  .contact-col ul li a{color:rgba(245,237,216,0.55);text-decoration:none;transition:color 0.3s;}
+  .contact-col ul li a:hover{color:var(--gold);}
+  .footer-bottom{padding:32px 0;display:flex;justify-content:space-between;align-items:center;}
+  .footer-copy{font-size:11px;color:rgba(245,237,216,0.25);letter-spacing:1px;}
+  .footer-tagline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:rgba(201,169,110,0.4);}
+
+  /* MAP SECTION */
+  .map-bar{background:var(--ink);padding:60px;display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;}
+  .map-text h3{font-family:'Cormorant Garamond',serif;font-size:36px;color:var(--cream);margin-bottom:16px;}
+  .map-text p{font-size:13px;color:rgba(245,237,216,0.55);line-height:1.8;}
+  .map-frame{border:1px solid rgba(201,169,110,0.2);overflow:hidden;height:240px;}
+  .map-frame iframe{width:100%;height:100%;filter:grayscale(100%) brightness(0.5) sepia(30%) hue-rotate(10deg);border:none;}
+
+  /* TOAST */
+  .toast{position:fixed;bottom:40px;right:40px;background:var(--gold);color:var(--deep);padding:16px 28px;font-family:'Montserrat',sans-serif;font-size:12px;letter-spacing:2px;font-weight:600;z-index:9000;transform:translateY(100px);opacity:0;transition:all 0.4s;}
+  .toast.show{transform:translateY(0);opacity:1;}
+
+  /* FLOATING CTA */
+  .float-cta{position:fixed;bottom:40px;left:40px;z-index:900;}
+  .float-btn{background:var(--gold);color:var(--deep);border:none;padding:14px 28px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:700;cursor:none;transition:all 0.3s;display:flex;align-items:center;gap:10px;animation:pulseGold 3s infinite;}
+  @keyframes pulseGold{0%,100%{box-shadow:0 0 0 0 rgba(201,169,110,0.5)}50%{box-shadow:0 0 0 12px rgba(201,169,110,0)}}
+  .float-btn:hover{background:var(--gold-light);}
+
+  /* MARQUEE */
+  .marquee-bar{background:var(--gold);padding:14px 0;overflow:hidden;white-space:nowrap;}
+  .marquee-inner{display:inline-block;animation:marquee 25s linear infinite;}
+  .marquee-item{display:inline;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:4px;color:var(--deep);margin:0 48px;}
+  .marquee-sep{display:inline;color:var(--deep);opacity:0.4;margin:0 8px;}
+  @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* RESPONSIVE */
+  @media(max-width:900px){
+    nav{padding:20px 24px;}
+    nav.scrolled{padding:14px 24px;}
+    .nav-links,.nav-reserve{display:none;}
+    .hamburger{display:flex;}
+    section{padding:80px 24px;}
+    .about-grid,.res-grid,.contact-grid,.form-row{grid-template-columns:1fr;}
+    .about-img-accent{display:none;}
+    .gallery-grid{grid-template-columns:repeat(2,1fr);grid-template-rows:auto;}
+    .gallery-item{grid-column:span 1!important;grid-row:span 1!important;height:220px;}
+    .exp-grid,.events-grid,.menu-panel.active{grid-template-columns:1fr;}
+    .menu-cols{grid-template-columns:1fr;}
+    .menu-section{grid-column:span 1;}
+    .menu-tabs{overflow-x:auto;justify-content:flex-start;}
+    .hero-badge{display:none;}
+    .contact-grid{grid-template-columns:1fr;}
+    .map-bar{grid-template-columns:1fr;}
+    #menu::before{display:none;}
+    .float-cta,.hero-actions{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">PABLO</a>
+  <ul class="nav-links">
+    <li><a href="#about">Story</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#contact">Find Us</a></li>
+  </ul>
+  <button class="nav-reserve" onclick="scrollToReservation()">Reserve a Table</button>
+  <div class="hamburger" onclick="toggleMobileMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Civil Lines · Nagpur · Est. 2012</p>
+    <h1 class="hero-title">
+      <em>Pablo</em>
+      <span>Art Lounge</span>
+    </h1>
+    <p class="hero-sub">Inspired by Picasso · A Canvas of Flavours</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="scrollToReservation()">Reserve Your Evening</button>
+      <button class="btn-outline" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">Explore Menu</button>
+    </div>
+  </div>
+  <div class="hero-badge">
+    <div class="hero-badge-text">Open Daily<br>11 AM – 1:30 AM<br>★ 4.4 ★</div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-bar">
+  <div class="marquee-inner">
+    <span class="marquee-item">PIZZA & PASTA <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">CRAFT COCKTAILS <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">LIVE MUSIC <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">ART LOUNGE NAGPUR <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">ASIAN CUISINE <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">ROOFTOP SWINGS <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">PICASSO INSPIRED <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">PIZZA & PASTA <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">CRAFT COCKTAILS <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">LIVE MUSIC <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">ART LOUNGE NAGPUR <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">ASIAN CUISINE <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">ROOFTOP SWINGS <span class="marquee-sep">✦</span></span>
+    <span class="marquee-item">PICASSO INSPIRED <span class="marquee-sep">✦</span></span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual" data-animate>
+      <div class="about-gold-frame"></div>
+      <img src="https://lh3.googleusercontent.com/places/ANXAkqG3EM9gaukdTC6foH04m_kSda-1prBrYvQpSryj-V5kt12jYhQXHFz8W0fnWBaLR9Y0S7P0e8p65iCryviPN5UqVaMitGfeCMk=s4800-w800-h600" alt="Pablo Cafe Interior" class="about-img-main" onerror="this.src='https://images.unsplash.com/photo-1514190051997-0f6f39ca5cde?w=600'"/>
+      <img src="https://lh3.googleusercontent.com/place-photos/AL8-SNG1fHwXUEKvBkQUHoonbrIpUvAQ1ac0Wl65Uz6T_sDPfSvuBHaMOdP-o49jDYoT52gS9y4dMoue8RCr4j65ITBpNpqBCAIss7lVsri9c9H82VpX41i91xwPBnhwWmDGh8jKowx-N4VqiYvZ6HU=s4800-w800-h600" alt="Pablo Cafe" class="about-img-accent" onerror="this.src='https://images.unsplash.com/photo-1481833761820-0509d3217039?w=400'"/>
+    </div>
+    <div class="about-text" data-animate>
+      <span class="section-tag">Our Story</span>
+      <h2 class="section-title">Where <em>Art</em> Meets<br>Gastronomy</h2>
+      <div class="divider"></div>
+      <p>Tucked in the heart of Civil Lines, Pablo – The Art Cafe & Lounge is Nagpur's most iconic dining destination. Inspired by the legendary artist Pablo Picasso, every corner of this space breathes creativity — from hand-painted murals to sculptural installations that transport you into a world of colour and imagination.</p>
+      <p>We believe a great meal is a work of art. Our kitchen crafts an eclectic menu spanning Asian delicacies, European classics, wood-fired pizzas, and signature cocktails — each dish a brushstroke on a culinary canvas. Whether you're here for an intimate dinner, a vibrant night out, or a lazy Sunday brunch, Pablo offers an experience that lingers long after the last course.</p>
+      <div class="about-stats">
+        <div><div class="stat-num">6K+</div><div class="stat-label">Happy Guests</div></div>
+        <div><div class="stat-num">4.4★</div><div class="stat-label">Google Rating</div></div>
+        <div><div class="stat-num">65+</div><div class="stat-label">Menu Items</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="gallery-header">
+    <span class="section-tag">Visual Journey</span>
+    <h2 class="section-title">The <em>Pablo</em> Aesthetic</h2>
+    <div class="divider center"></div>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item">
+      <img src="https://lh3.googleusercontent.com/places/ANXAkqHVOum6H0GnxtAmboziT_UK5_gXpkmxG1iHipTym3zQEtD031uwkupc2ME66noHgsF-AzcJuvhFbtgE5fywyYScvcFPUFo9tLc=s4800-w800-h600" alt="Ambience" onerror="this.src='https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800'"/>
+      <div class="gallery-overlay"></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://lh3.googleusercontent.com/place-photos/AL8-SNFxEgjh-XO02l_7ptyxxZARYgYbgi-SaVJIglrSujDwWdadjepQvZn883ClW7atfzx6cOJVUXnzGlBP1p7cTive1CLT0QHc564FCkSsbNHWC1Sc13sanvKeJPl9f3FUHz4VwVwyFrnpNpMt286WnPgKUw=s4800-w800-h600" alt="Food" onerror="this.src='https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=600'"/>
+      <div class="gallery-overlay"></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://lh3.googleusercontent.com/place-photos/AL8-SNH6dVQUNUHraCzYMePigQO4RBUgierW5IG99gkBUJ5-nbQCCk5qoQI8kphaFy6Jo6MrR_jpGG54j1vr9-EShqhQq8GFTgQYH38s-CIsFgHhS7ubJralt98ATGdsaYGtHqfeqTDSFMwMGy0bIGM=s4800-w800-h600" alt="Cocktails" onerror="this.src='https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600'"/>
+      <div class="gallery-overlay"></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://lh3.googleusercontent.com/place-photos/AL8-SNFi8No5DM5FOsGL2ooFkBmLeEY1EQTLmUBA9IZYxw2f8g7relXoER6mZlrxKyZw6GG99WbZ993-d8lvvsoE7KkUyEEvZxqgJ4aM0QB1PbYzFOEZszebizfmAw_3Tch-mLM8s1GTOy-ZYxM6wQ=s4800-w800-h600" alt="Interior" onerror="this.src='https://images.unsplash.com/photo-1559339352-11d035aa65de?w=400'"/>
+      <div class="gallery-overlay"></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://lh3.googleusercontent.com/place-photos/AL8-SNFOL7dNYI-VFSlyDTjVVX0UxfOMPUkHCp0rfBxDF_Sne8lbMn81vQNCIg5YpPWnN4Ue1pV_gc3R7B2vuF5SVjY4I7XQ1WdzAT2vQGLZNNYPzRHkTiixIGASWXz5rN0vprN-hs72VBe7ZVvAfvkJOT_1iQ=s4800-w800-h600" alt="Seating" onerror="this.src='https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400'"/>
+      <div class="gallery-overlay"></div>
+    </div>
+    <div class="gallery-item">
+      <img src="https://lh3.googleusercontent.com/place-photos/AL8-SNHROwfTJqO5hIe2lNJZ1ut4mMbAwMRpr5U86DmSfF6hPBdo1XMAihB2PZ4BtXg3mz5565fVpwMs_q-Ncxpl5VHYM6Ee3CfxZ8nYqSbkJjxLGlgzLl4-j1YWWKjGPOiIeZPJeR9TiJ8OvkaPYuE=s4800-w800-h600" alt="Dishes" onerror="this.src='https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600'"/>
+      <div class="gallery-overlay"></div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="menu-header">
+    <span class="section-tag">Culinary Canvas</span>
+    <h2 class="section-title">Our <em>Menu</em></h2>
+    <div class="divider center"></div>
+    <p style="font-size:13px;color:rgba(245,237,216,0.45);max-width:500px;margin:0 auto;line-height:1.8;">Each dish is crafted with the passion of an artist. Prices inclusive of taxes.</p>
+  </div>
+
+  <div class="menu-tabs">
+    <button class="menu-tab active" onclick="switchTab('starters')">Starters</button>
+    <button class="menu-tab" onclick="switchTab('mains')">Mains</button>
+    <button class="menu-tab" onclick="switchTab('pizza')">Pizzas</button>
+    <button class="menu-tab" onclick="switchTab('pasta')">Pasta & Grills</button>
+    <button class="menu-tab" onclick="switchTab('asian')">Asian</button>
+    <button class="menu-tab" onclick="switchTab('desserts')">Desserts</button>
+    <button class="menu-tab" onclick="switchTab('mocktails')">Mocktails</button>
+  </div>
+
+  <!-- STARTERS -->
+  <div class="menu-panel active" id="tab-starters">
+    <div class="menu-section">
+      <h3 class="menu-section-title">Salads & Soups</h3>
+      <div class="menu-cols">
+        <div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Asparagus & Nut Salad</div><div class="menu-item-desc">Fresh greens with asparagus & mixed nuts</div></div><div class="menu-price">₹320</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Warming King Glazed Salad</div><div class="menu-item-desc">King mushrooms with glazed dressing</div></div><div class="menu-price">₹310</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Honey Ginger Chicken Salad</div><div class="menu-item-desc">Tender chicken with honey ginger dressing</div></div><div class="menu-price">₹370</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Guacamole with Nachos</div><div class="menu-item-desc">Fresh guacamole with crispy nachos</div></div><div class="menu-price">₹320</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Mushroom Cream Soup</div></div><div class="menu-price">₹280</div></div>
+        </div>
+        <div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Clam Chowder</div><div class="menu-item-desc">Classic American style</div></div><div class="menu-price">₹320</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Minestrone</div><div class="menu-item-desc">Classic Italian vegetable broth</div></div><div class="menu-price">₹270</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Warming Chicken Soup</div><div class="menu-item-desc">A warming broth from the North Eastern hills</div></div><div class="menu-price">₹310</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Tomato Basil Soup</div></div><div class="menu-price">₹250</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="menu-section">
+      <h3 class="menu-section-title">Starters / Chakhna</h3>
+      <div class="menu-cols">
+        <div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Monkey Nuts</div><div class="menu-item-desc">Crispy spiced peanuts — our signature bar bite</div></div><div class="menu-price">₹199</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Wasabi Chanachor</div><div class="menu-item-desc">Wasabi glazed chana chur</div></div><div class="menu-price">₹179</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Chips & More</div></div><div class="menu-price">₹150</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Veg Tapas Platter</div><div class="menu-item-desc">Assorted vegetarian tapas bites</div></div><div class="menu-price">₹490</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Cocktail Spring Rolls</div><div class="menu-item-desc">Crispy rolls with dipping sauce</div></div><div class="menu-price">₹320</div></div>
+        </div>
+        <div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Hara Bhara Kabab</div><div class="menu-item-desc">Herb-loaded kebabs with mint chutney</div></div><div class="menu-price">₹350</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Chicken Popcorn</div><div class="menu-item-desc">Crispy bite-sized fried chicken</div></div><div class="menu-price">₹370</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Teriyaki Chicken</div><div class="menu-item-desc">Glazed chicken in teriyaki sauce</div></div><div class="menu-price">₹420</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Nachos With Chunky Dip</div></div><div class="menu-price">₹350</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MAINS -->
+  <div class="menu-panel" id="tab-mains">
+    <div class="menu-section">
+      <h3 class="menu-section-title">Main Course — Vegetarian</h3>
+      <div class="menu-cols">
+        <div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Butter Naan</div></div><div class="menu-price">₹60</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Dal Churri</div></div><div class="menu-price">₹270</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Paneer Chop Masala</div><div class="menu-item-desc">Cottage cheese in rich spiced gravy</div></div><div class="menu-price">₹420</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Paneer Shashlik</div></div><div class="menu-price">₹450</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Fan Grilled Cottage Cheese Steak</div></div><div class="menu-price">₹450</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Joera Rice</div></div><div class="menu-price">₹275</div></div>
+        </div>
+        <div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Gnocchi Arrabiata</div><div class="menu-item-desc">Italian potato dumplings in spicy tomato sauce</div></div><div class="menu-price">₹460</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Locha Parantha</div></div><div class="menu-price">₹100</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Steamed Rice</div></div><div class="menu-price">₹175</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Tandoori Roti</div></div><div class="menu-price">₹50</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Tripple De Fungi</div><div class="menu-item-desc">Three mushroom preparation — chef's special</div></div><div class="menu-price">₹440</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="menu-section">
+      <h3 class="menu-section-title">Main Course — Non-Vegetarian</h3>
+      <div class="menu-cols">
+        <div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Veau Gouté Rôti</div><div class="menu-item-desc">Slow cooked mutton in reduced onion gravy</div></div><div class="menu-price">₹560</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Chicken Tikka Biryani</div></div><div class="menu-price">₹480</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Grilled Fish With Lemon Butter</div></div><div class="menu-price">₹520</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Chicken Saltim Bocca</div><div class="menu-item-desc">Italian-style chicken with sage & prosciutto</div></div><div class="menu-price">₹490</div></div>
+        </div>
+        <div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Carbona Grilled Fish</div><div class="menu-item-desc">Grilled with Sardinian herbs and olive oil</div></div><div class="menu-price">₹530</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Caprese Saffron Alla Disco</div></div><div class="menu-price">₹510</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Twin Sauce Risotto</div></div><div class="menu-price">₹490</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Singapore Style Chicken And Rice</div></div><div class="menu-price">₹475</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIZZA -->
+  <div class="menu-panel" id="tab-pizza">
+    <div class="menu-section">
+      <h3 class="menu-section-title">Artisan Pizzas</h3>
+      <div class="menu-cols">
+        <div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Pittsa Classic Margherita</div><div class="menu-item-desc">San Marzano tomato, fresh mozzarella, basil</div></div><div class="menu-price">₹480</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Pittsa Bianca Verdure</div><div class="menu-item-desc">White sauce base with seasonal vegetables</div></div><div class="menu-price">₹520</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Pittsa Con Pollo</div><div class="menu-item-desc">Chicken, fresh veggies, olives on savoury base</div></div><div class="menu-price">₹575</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Pittsa Mushroom Cream</div><div class="menu-item-desc">Mushroom, chives & truffle oil</div></div><div class="menu-price">₹540</div></div>
+        </div>
+        <div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Pittsa Meat Overload</div><div class="menu-item-desc">Loaded with four different meats — not for the faint-hearted</div></div><div class="menu-price">₹619</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Pittsa Mediterranean Pizza</div><div class="menu-item-desc">Sun-dried tomatoes, olives, feta & herbs</div></div><div class="menu-price">₹575</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Mexican Pizza</div><div class="menu-item-desc">Jalapeños, chicken, salsa, chipotle cream</div></div><div class="menu-price">₹590</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Kuzbuz Pita</div><div class="menu-item-desc">Turkish flatbread pizza with spiced meat</div></div><div class="menu-price">₹590</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PASTA & GRILLS -->
+  <div class="menu-panel" id="tab-pasta">
+    <div class="menu-section">
+      <h3 class="menu-section-title">Pasta & Continental Grills</h3>
+      <div class="menu-cols">
+        <div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Fettuccini Parma Rosa</div><div class="menu-item-desc">Creamy rosé sauce with roasted vegetables</div></div><div class="menu-price">₹420</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Fettuccini Parma Rosa (Non-Veg)</div></div><div class="menu-price">₹480</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Penne Arrabiata</div><div class="menu-item-desc">Spicy tomato sauce with garlic & chilli</div></div><div class="menu-price">₹390</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Penne Alfredo</div></div><div class="menu-price">₹410</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Picasso's Tortellini</div><div class="menu-item-desc">House specialty stuffed pasta</div></div><div class="menu-price">₹460</div></div>
+        </div>
+        <div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Pappardelle Rosso</div></div><div class="menu-price">₹430</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Spaghetti Carbonara</div><div class="menu-item-desc">Guanciale, egg yolk, pecorino romano</div></div><div class="menu-price">₹490</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Farfalle Arrabiata Pasta</div><div class="menu-item-desc">Bow-tie pasta in spicy tomato sauce</div></div><div class="menu-price">₹400</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Truffle Shuffle Pasta</div></div><div class="menu-price">₹530</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASIAN -->
+  <div class="menu-panel" id="tab-asian">
+    <div class="menu-section">
+      <h3 class="menu-section-title">Asian Kitchen</h3>
+      <div class="menu-cols">
+        <div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Veg Spring Roll</div></div><div class="menu-price">₹280</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Ravioli A La Fabrik</div><div class="menu-item-desc">Chef's signature stuffed ravioli</div></div><div class="menu-price">₹460</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Dim Sum (Chicken)</div><div class="menu-item-desc">Steamed dumplings with soy dipping sauce</div></div><div class="menu-price">₹380</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Pan Pan Pauze Soup</div><div class="menu-item-desc">Asian clear soup with vegetables</div></div><div class="menu-price">₹290</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Thupka</div><div class="menu-item-desc">North Eastern style noodle broth with chicken</div></div><div class="menu-price">₹350</div></div>
+        </div>
+        <div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Mushroom Patara</div></div><div class="menu-price">₹390</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Can I Get Some Fries With That Booty</div><div class="menu-item-desc">Crispy fries with spiced chicken</div></div><div class="menu-price">₹420</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Mushroom Chicken Dim</div></div><div class="menu-price">₹370</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="nonveg-dot"></span>Chicken Fried Rice</div></div><div class="menu-price">₹390</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DESSERTS -->
+  <div class="menu-panel" id="tab-desserts">
+    <div class="menu-section">
+      <h3 class="menu-section-title">Sweet Finales</h3>
+      <div class="menu-cols">
+        <div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Chocolato</div><div class="menu-item-desc">Rich molten chocolate delight</div></div><div class="menu-price">₹350</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Kiwi Tres Leches</div><div class="menu-item-desc">Three-milk cake with fresh kiwi</div></div><div class="menu-price">₹380</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Wild Berry Cheese Cake</div></div><div class="menu-price">₹390</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Nutella Brownie</div><div class="menu-item-desc">Warm brownie with Nutella drizzle & ice cream</div></div><div class="menu-price">₹360</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Rum Brownie</div><div class="menu-item-desc">Brownie with rum infused sauce — guest favourite</div></div><div class="menu-price">₹380</div></div>
+        </div>
+        <div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Red Velvet Mascarpone</div></div><div class="menu-price">₹390</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Churros</div><div class="menu-item-desc">Spanish fried dough with chocolate dip</div></div><div class="menu-price">₹320</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Chocolate Gourmet Cake (500gm)</div></div><div class="menu-price">₹700</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Chocolate Flakey Slice</div></div><div class="menu-price">₹290</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Wake Me Up (Tiramisu)</div><div class="menu-item-desc">Classic Italian pick-me-up</div></div><div class="menu-price">₹380</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MOCKTAILS -->
+  <div class="menu-panel" id="tab-mocktails">
+    <div class="menu-section">
+      <h3 class="menu-section-title">Signature Mocktails</h3>
+      <div class="menu-cols">
+        <div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Love of Thieves</div><div class="menu-item-desc">Passionate fruity blend — a guilty pleasure</div></div><div class="menu-price">₹325</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Madrid Sketches</div><div class="menu-item-desc">Spanish inspired citrus & herb cooler</div></div><div class="menu-price">₹325</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Mojito Mocktail</div><div class="menu-item-desc">Mint, lime, soda — the classic refresher</div></div><div class="menu-price">₹325</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Peach Basil Splitzer</div><div class="menu-item-desc">Peach purée with fresh basil & sparkling water</div></div><div class="menu-price">₹325</div></div>
+        </div>
+        <div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Stealing Monalisa</div><div class="menu-item-desc">Mystery blend — you'll want to steal the recipe</div></div><div class="menu-price">₹325</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Prabhu Deva</div><div class="menu-item-desc">Bold tropical twist with mango & chilli</div></div><div class="menu-price">₹350</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Faluda Fabulous</div><div class="menu-item-desc">Desi rose faluda with a modern twist</div></div><div class="menu-price">₹325</div></div>
+          <div class="menu-item"><div class="menu-item-info"><div class="menu-item-name"><span class="veg-dot"></span>Prime Bar Lemonade</div><div class="menu-item-desc">House-pressed lemon with lavender</div></div><div class="menu-price">₹280</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="grid-column:span 2;text-align:center;padding:32px 0;border-top:1px solid rgba(201,169,110,0.15);margin-top:20px;">
+      <p style="font-size:12px;color:rgba(245,237,216,0.35);letter-spacing:2px;">FOR COCKTAILS & SPIRITS · PLEASE REQUEST OUR BAR MENU FROM YOUR SERVER</p>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div style="text-align:center;margin-bottom:20px;">
+    <span class="section-tag">What Awaits You</span>
+    <h2 class="section-title">The <em>Pablo</em> Experience</h2>
+    <div class="divider center"></div>
+  </div>
+  <div class="exp-grid">
+    <div class="exp-card" data-animate>
+      <div class="exp-icon">🎨</div>
+      <h3>Art-Adorned Space</h3>
+      <p>Every wall is a canvas. Pablo Picasso's iconic works and contemporary sculptures create an immersive environment that transforms dining into a cultural experience.</p>
+    </div>
+    <div class="exp-card" data-animate>
+      <div class="exp-icon">🎵</div>
+      <h3>Live Music Nights</h3>
+      <p>Vibrant evenings with live bands, DJ sets, and karaoke. From soulful acoustic sessions to high-energy nights — there's always something happening at Pablo.</p>
+    </div>
+    <div class="exp-card" data-animate>
+      <div class="exp-icon">🍹</div>
+      <h3>Craft Cocktail Bar</h3>
+      <p>Our expert mixologists craft imaginative cocktails and mocktails inspired by art movements. Each drink tells a story worth savouring slowly.</p>
+    </div>
+    <div class="exp-card" data-animate>
+      <div class="exp-icon">🌿</div>
+      <h3>Swing Seating</h3>
+      <p>Our unique outdoor seating features swings in a garden-like setting — a favourite for dates, brunch outings, and Instagram-worthy moments.</p>
+    </div>
+    <div class="exp-card" data-animate>
+      <div class="exp-icon">🍕</div>
+      <h3>Eclectic Cuisine</h3>
+      <p>From wood-fired pizzas and handmade pastas to Asian specialties and Indian mains, our menu is a world tour on a plate — curated with artistic precision.</p>
+    </div>
+    <div class="exp-card" data-animate>
+      <div class="exp-icon">🥂</div>
+      <h3>Private Events</h3>
+      <p>Host your celebrations in Pablo's elegant spaces. Birthdays, corporate dinners, anniversaries — our team crafts bespoke experiences for every occasion.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section id="events">
+  <span class="section-tag">What's On</span>
+  <h2 class="section-title">Upcoming <em>Events</em></h2>
+  <div class="divider"></div>
+  <div class="events-grid">
+    <div class="event-card">
+      <div class="event-date">FRI</div>
+      <div class="event-month">Every Friday</div>
+      <h3>Acoustic Friday</h3>
+      <p>Soulful live acoustic performances from Nagpur's finest musicians. The perfect start to your weekend — pair it with our signature cocktails.</p>
+      <span class="event-tag">Live Music</span>
+    </div>
+    <div class="event-card">
+      <div class="event-date">SAT</div>
+      <div class="event-month">Every Saturday</div>
+      <h3>DJ Saturday</h3>
+      <p>The city's best DJs take over Pablo. Dance, drink, and immerse yourself in a night of high-energy music and electric ambiance.</p>
+      <span class="event-tag">DJ Night</span>
+    </div>
+    <div class="event-card">
+      <div class="event-date">SUN</div>
+      <div class="event-month">Every Sunday</div>
+      <h3>Sunday Brunch</h3>
+      <p>Slow down with our extended brunch menu, bottomless mimosas (seasonal), and chilled afternoon vibes. Swing seating. Good food. Great company.</p>
+      <span class="event-tag">Brunch</span>
+    </div>
+  </div>
+</section>
+
+<!-- RESERVATION -->
+<section id="reservation">
+  <div style="text-align:center;">
+    <span class="section-tag">Secure Your Evening</span>
+    <h2 class="section-title">Reserve a <em>Table</em></h2>
+    <div class="divider center"></div>
+  </div>
+  <div class="res-grid">
+    <div class="res-info">
+      <h3>An Unforgettable<br>Evening Awaits</h3>
+      <p>We recommend reservations for weekends and special events to ensure we can give you the full Pablo experience. Walk-ins are welcome subject to availability.</p>
+      <div class="res-details">
+        <div class="res-detail-item">
+          <div class="res-detail-icon">📍</div>
+          <div class="res-detail-text">
+            <strong>Address</strong>
+            <span>240/A, East High Court Road,<br>Civil Lines, Nagpur – 440001</span>
+          </div>
+        </div>
+        <div class="res-detail-item">
+          <div class="res-detail-icon">⏰</div>
+          <div class="res-detail-text">
+            <strong>Hours</strong>
+            <span>Monday – Sunday<br>11:00 AM – 1:30 AM</span>
+          </div>
+        </div>
+        <div class="res-detail-item">
+          <div class="res-detail-icon">📞</div>
+          <div class="res-detail-text">
+            <strong>Reservations</strong>
+            <span>+91 90110 22226</span>
+          </div>
+        </div>
+        <div class="res-detail-item">
+          <div class="res-detail-icon">💰</div>
+          <div class="res-detail-text">
+            <strong>Average Cost</strong>
+            <span>₹1,200 – ₹1,800 for two</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="res-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="Rahul"/>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Sharma"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" placeholder="+91 98765 43210"/>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" placeholder="you@example.com"/>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="resDate"/>
+        </div>
+        <div class="form-group">
+          <label>Time</label>
+          <select>
+            <option value="">Select Time</option>
+            <option>12:00 PM – Lunch</option>
+            <option>1:00 PM</option>
+            <option>2:00 PM</option>
+            <option>7:00 PM – Dinner</option>
+            <option>7:30 PM</option>
+            <option>8:00 PM</option>
+            <option>8:30 PM</option>
+            <option>9:00 PM</option>
+            <option>9:30 PM</option>
+            <option>10:00 PM</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Number of Guests</label>
+          <select>
+            <option>1 Guest</option>
+            <option>2 Guests</option>
+            <option>3 Guests</option>
+            <option>4 Guests</option>
+            <option>5 Guests</option>
+            <option>6 Guests</option>
+            <option>7-10 Guests</option>
+            <option>10+ Guests (Event Enquiry)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Occasion</label>
+          <select>
+            <option value="">Select (Optional)</option>
+            <option>Birthday Celebration</option>
+            <option>Anniversary</option>
+            <option>Date Night</option>
+            <option>Business Dinner</option>
+            <option>Friends Outing</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Special Requests</label>
+        <textarea placeholder="Dietary requirements, seating preference, decoration requests…"></textarea>
+      </div>
+      <p class="form-note">Reservations are confirmed via phone/WhatsApp within 2 hours</p>
+      <button class="btn-submit" onclick="submitReservation()">Confirm Reservation →</button>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div style="text-align:center;">
+    <span class="section-tag">Guest Stories</span>
+    <h2 class="section-title">What They <em>Say</em></h2>
+    <div class="divider center"></div>
+  </div>
+  <div class="testimonials-inner">
+    <div class="testimonial-slider">
+      <div class="testimonial-slide active">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">An amazing themed cafe, adorned with Pablo Picasso's paintings and sculptures. Outstanding fun vibes and the best part — the food is absolutely on point. One of Nagpur's finest experiences.</p>
+        <div class="testimonial-author">— Google Review · Nagpur</div>
+      </div>
+      <div class="testimonial-slide">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">Fantastic interior, excellent sound system, and fabulous choice of music. Well-mannered staff who made us feel so welcome. This place is going to rock for years to come.</p>
+        <div class="testimonial-author">— TripAdvisor Review</div>
+      </div>
+      <div class="testimonial-slide">
+        <div class="testimonial-stars">★★★★☆</div>
+        <p class="testimonial-quote">Great ambiance and amazing service. The chicken pizza and rum brownie were absolutely phenomenal. 5 stars to the ambience and music — thanks for making Nagpur feel alive!</p>
+        <div class="testimonial-author">— Zomato Review</div>
+      </div>
+      <div class="testimonial-slide">
+        <div class="testimonial-stars">★★★★★</div>
+        <p class="testimonial-quote">I ordered the Picasso's Tortellini and was blown away. Unique blend of ingredients, cooked to perfection. The packaging kept everything fresh and hot too. Highly recommend Pablo!</p>
+        <div class="testimonial-author">— MagicPin Review</div>
+      </div>
+    </div>
+    <div class="testimonial-nav" id="testimonialNav">
+      <div class="t-dot active" onclick="goToSlide(0)"></div>
+      <div class="t-dot" onclick="goToSlide(1)"></div>
+      <div class="t-dot" onclick="goToSlide(2)"></div>
+      <div class="t-dot" onclick="goToSlide(3)"></div>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<div class="map-bar">
+  <div class="map-text">
+    <span class="section-tag">Find Us</span>
+    <h3>In the Heart of <em style="font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--gold)">Civil Lines</em></h3>
+    <p>240/A, East High Court Road, Civil Lines, Nagpur – 440001. We're easy to find and have parking available nearby at Bhole Petrol Pump Square (~467m away).</p>
+    <div style="display:flex;gap:16px;margin-top:24px;flex-wrap:wrap;">
+      <a href="https://maps.google.com/?q=Pablo+The+Art+Cafe+Lounge+Civil+Lines+Nagpur" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--deep);padding:12px 24px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:600;text-decoration:none;">📍 Get Directions</a>
+      <a href="tel:+919011022226" style="display:inline-flex;align-items:center;gap:8px;border:1px solid var(--gold);color:var(--gold);padding:12px 24px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:500;text-decoration:none;">📞 Call Now</a>
+    </div>
+  </div>
+  <div class="map-frame">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3721.6!2d79.0676376!3d21.1502111!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bd4c082f569fa3d%3A0x9a82a0e91a806990!2sPablo%20-%20The%20Art%20Cafe'%20%26%20Lounge!5e0!3m2!1sen!2sin!4v1" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+</div>
+
+<!-- CONTACT / FOOTER -->
+<footer id="contact">
+  <div class="contact-grid">
+    <div class="contact-brand">
+      <div class="contact-logo">PABLO</div>
+      <div class="contact-tagline">The Art Cafe & Lounge · Civil Lines, Nagpur</div>
+      <p style="font-size:13px;color:rgba(245,237,216,0.45);line-height:1.8;max-width:340px;">An art lounge inspired by Pablo Picasso. A place to dive into the exquisite life of the artist — through food, drink, and atmosphere.</p>
+      <div class="social-links">
+        <a href="https://www.facebook.com/pablonagpur/" target="_blank" class="social-link">f</a>
+        <a href="#" class="social-link">in</a>
+        <a href="https://www.zomato.com/nagpur/pablo-the-art-cafe-lounge-civil-lines" target="_blank" class="social-link">z</a>
+      </div>
+    </div>
+    <div class="contact-col">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="#about">Our Story</a></li>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#events">Events</a></li>
+        <li><a href="#reservation">Reservations</a></li>
+      </ul>
+    </div>
+    <div class="contact-col">
+      <h4>Visit Us</h4>
+      <ul>
+        <li>240/A, East High Court Road</li>
+        <li>Civil Lines, Nagpur 440001</li>
+        <li style="margin-top:8px;"><a href="tel:+919011022226">+91 90110 22226</a></li>
+        <li>Open Daily: 11 AM – 1:30 AM</li>
+        <li style="margin-top:8px;color:var(--gold);">★ 4.4 — 6,600+ Reviews</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2025 Pablo – The Art Cafe & Lounge. All rights reserved.</div>
+    <div class="footer-tagline">Inspired by Picasso · Crafted in Nagpur</div>
+  </div>
+</footer>
+
+<!-- FLOATING CTA -->
+<div class="float-cta">
+  <button class="float-btn" onclick="scrollToReservation()">🎨 Book a Table</button>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✓ Reservation Request Sent! We'll confirm via WhatsApp.</div>
+
+<script>
+// CURSOR
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top = e.clientY + 'px';
+  setTimeout(() => {
+    ring.style.left = e.clientX + 'px';
+    ring.style.top = e.clientY + 'px';
+  }, 80);
+});
+document.querySelectorAll('a,button,.menu-tab,.t-dot').forEach(el => {
+  el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%,-50%) scale(2.5)'; ring.style.width = '56px'; ring.style.height = '56px'; });
+  el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%,-50%) scale(1)'; ring.style.width = '36px'; ring.style.height = '36px'; });
+});
+
+// NAVBAR SCROLL
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 80);
+});
+
+// MENU TABS
+function switchTab(tab) {
+  document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// TESTIMONIALS
+let currentSlide = 0;
+function goToSlide(n) {
+  document.querySelectorAll('.testimonial-slide').forEach((s,i) => s.classList.toggle('active', i === n));
+  document.querySelectorAll('.t-dot').forEach((d,i) => d.classList.toggle('active', i === n));
+  currentSlide = n;
+}
+setInterval(() => goToSlide((currentSlide + 1) % 4), 5000);
+
+// RESERVATION
+function scrollToReservation() {
+  document.getElementById('reservation').scrollIntoView({ behavior: 'smooth' });
+}
+function submitReservation() {
+  const toast = document.getElementById('toast');
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+// SET MIN DATE
+document.getElementById('resDate').min = new Date().toISOString().split('T')[0];
+
+// MOBILE MENU
+function toggleMobileMenu() {
+  const links = document.querySelector('.nav-links');
+  if (!document.getElementById('mobileMenu')) {
+    const m = document.createElement('div');
+    m.id = 'mobileMenu';
+    m.style.cssText = 'position:fixed;top:60px;left:0;right:0;background:rgba(10,8,6,0.98);backdrop-filter:blur(12px);padding:32px 24px;z-index:999;border-top:1px solid rgba(201,169,110,0.15);';
+    m.innerHTML = `<ul style="list-style:none;display:flex;flex-direction:column;gap:20px;">
+      <li><a href="#about" onclick="closeMenu()" style="color:rgba(245,237,216,0.8);text-decoration:none;font-family:Montserrat,sans-serif;font-size:12px;letter-spacing:4px;text-transform:uppercase;">Story</a></li>
+      <li><a href="#menu" onclick="closeMenu()" style="color:rgba(245,237,216,0.8);text-decoration:none;font-family:Montserrat,sans-serif;font-size:12px;letter-spacing:4px;text-transform:uppercase;">Menu</a></li>
+      <li><a href="#gallery" onclick="closeMenu()" style="color:rgba(245,237,216,0.8);text-decoration:none;font-family:Montserrat,sans-serif;font-size:12px;letter-spacing:4px;text-transform:uppercase;">Gallery</a></li>
+      <li><a href="#events" onclick="closeMenu()" style="color:rgba(245,237,216,0.8);text-decoration:none;font-family:Montserrat,sans-serif;font-size:12px;letter-spacing:4px;text-transform:uppercase;">Events</a></li>
+      <li><a href="#reservation" onclick="closeMenu()" style="color:var(--gold);text-decoration:none;font-family:Montserrat,sans-serif;font-size:12px;letter-spacing:4px;text-transform:uppercase;">Reserve a Table</a></li>
+    </ul>`;
+    document.body.appendChild(m);
+  } else closeMenu();
+}
+function closeMenu() { const m = document.getElementById('mobileMenu'); if (m) m.remove(); }
+
+// SCROLL ANIMATIONS
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('[data-animate]').forEach(el => {
+  el.style.opacity = '0'; el.style.transform = 'translateY(40px)'; el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+  observer.observe(el);
+});
+</script>
+</body>
+</html>
